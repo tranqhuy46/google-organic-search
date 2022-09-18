@@ -49,10 +49,12 @@ export class UserNotFoundError extends CustomError {
 }
 
 export class UnauthorizedError extends CustomError {
-  public static readonly Msg = "Login failed";
+  public static readonly Msg = "Unauthorized";
   public static readonly HttpStatus = HttpStatusCodes.UNAUTHORIZED;
 
   constructor() {
     super(UnauthorizedError.Msg, UnauthorizedError.HttpStatus);
   }
 }
+
+export * from "./error_user";

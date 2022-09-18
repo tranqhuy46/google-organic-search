@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -10,7 +10,7 @@ import BaseRouter from "@gsc/server/routes/index";
 import { AppDataSource } from "./data_source";
 
 const app = express();
-const port = 3333;
+const port = envVars.port;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,14 +29,22 @@ if (envVars.nodeEnv === "production") {
 app.use("/api/v1", BaseRouter);
 
 // Error handling
-app.use((err: Error | CustomError, req: Request, res: Response) => {
-  logger.err(err, true);
-  const status =
-    err instanceof CustomError ? err.HttpStatus : StatusCodes.BAD_REQUEST;
-  return res.status(status).json({
-    error: err.message,
-  });
-});
+app.use(
+  (
+    err: Error | CustomError,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    logger.err(err, true);
+    const status =
+      (err as any)?.HttpStatus ?? StatusCodes.INTERNAL_SERVER_ERROR;
+
+    res.status(status).json({
+      error: err.message,
+    });
+  }
+);
 
 AppDataSource.initialize()
   .then(() => {
