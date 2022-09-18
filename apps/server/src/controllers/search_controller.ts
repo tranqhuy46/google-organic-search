@@ -1,20 +1,18 @@
 import puppeteer from "puppeteer";
+import SearchService from "@gsc/server/services/search_service";
+import Pup from "@gsc/server/vendors/puppeteer";
 import type { RequestHandler } from "express";
+import type { IReq } from "@gsc/server/shared/type";
 
-const searchForKeyword: RequestHandler = async (req, res) => {
-  const browser = await puppeteer.launch({
-    headless: false,
-    slowMo: 1000, // slow down by 1s
-  });
-  const page = await browser.newPage();
-  const querystring = encodeURI("nimble");
-  await page.goto("https://google.com/search?q=" + querystring, {
-    waitUntil: "networkidle2",
-  });
-  const bodyHandle = await page.$("body");
-  const html = await page.evaluate((body) => body.innerHTML, bodyHandle);
-  await bodyHandle.dispose();
-  await browser.close();
+const searchForKeyword: RequestHandler = async (
+  req: IReq<{
+    keywords: string[];
+  }>,
+  res
+) => {
+  const { keywords } = req.body;
+  const browser = await Pup.launchBrowserInstance();
+  const html = await SearchService.searchGoogleWithKeywordsByPuppeteer(browser);
   res.status(200).send(html);
 };
 
