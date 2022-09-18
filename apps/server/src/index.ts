@@ -41,9 +41,7 @@ app.use((err: Error | CustomError, req: Request, res: Response) => {
 AppDataSource.initialize()
   .then(() => {
     app.listen(port, () => {
-      logger.info(
-        "Server is listening on port " + port + " " + envVars.cookieProps.key
-      );
+      logger.info("Server is listening on port " + port);
     });
   })
   .catch((error) => logger.err(error, true));
