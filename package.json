@@ -11,7 +11,8 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev:client": "yarn workspace @gsc/client start"
+    "dev:client": "yarn workspace @gsc/client start",
+    "dev:server": "yarn workspace @gsc/server serve"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

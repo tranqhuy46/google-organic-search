@@ -1,5 +1,15 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "$NODE_ENV",
+    "$PORT",
+    "$COOKIE_SECRET",
+    "$COOKIE_PATH",
+    "$COOKIE_EXP",
+    "$COOKIE_DOMAIN",
+    "$SECURE_COOKIE",
+    "$JWT_SECRET"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
