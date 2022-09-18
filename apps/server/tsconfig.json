@@ -1,0 +1,33 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "baseUrl": "./",
+      "paths": {
+         "@gsc/server/shared/*": [
+           "src/shared/*"
+         ],
+         "@gsc/server/routes/*": [
+            "src/routes/*"
+          ],
+          "@gsc/server/controllers*": [
+            "src/controllers/*"
+          ],
+          "@gsc/server/utils*": [
+            "src/utils/*"
+          ],
+       },
+   },
+   "include": ["src/**/*"],
+   "exclude": ["node_modules"]
+}
