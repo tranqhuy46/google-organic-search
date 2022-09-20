@@ -3,9 +3,9 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
+import { IKeywordReport } from "ui/shared/type";
 import { Search, FileSpreadsheet } from "tabler-icons-react";
 import { MOCK_KEYWORD_RESOURCES } from "../../mock/keywords";
-import { IKeywordReport } from "ui/shared/type";
 import "./Home.scss";
 
 interface IKeywordReportTableProps {
@@ -60,7 +60,7 @@ const Home: React.FC = () => {
             placeholder="Search for keyword reports"
           />
         </InputGroup>
-        <Button variant="primary" className="keyword-file-upload-button">
+        <Button variant="secondary" className="keyword-file-upload-button">
           <div className="keyword-file-upload-button__inner">
             <span className="keyword-file-upload-button__label">
               Upload .csv file

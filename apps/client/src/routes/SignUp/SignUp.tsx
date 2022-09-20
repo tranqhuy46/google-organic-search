@@ -9,65 +9,75 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import Toaster from "../../lib/toast";
 import AuthAPI from "../../api/auth";
 import AuthContext from "../../context/auth";
-import "./SignIn.scss";
-import { INDEX_ROUTE, SIGNUP_ROUTE } from "../../shared/routes";
+import "./SignUp.scss";
+import { INDEX_ROUTE, LOGIN_ROUTE } from "../../shared/routes";
 
-interface SignInForm {
+interface SignUpForm {
   email: string;
   password: string;
+  confirm: string;
 }
 
-const SignInFormSchema = z.object({
-  email: z.string().email("Invalid e-mail address"),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-      "Password must be 6 or more characters long, contains at leat one uppercase letter, one digit and one special character."
-    ),
-});
+const SignUpFormSchema = z
+  .object({
+    email: z.string().email("Invalid e-mail address"),
+    password: z
+      .string()
+      .regex(
+        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+        "Password must be 6 or more characters long, contains at leat one uppercase letter, one digit and one special character."
+      ),
+    confirm: z
+      .string()
+      .regex(
+        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+        "Password must be 6 or more characters long, contains at leat one uppercase letter, one digit and one special character."
+      ),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"],
+  });
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const {
     register,
-    watch,
     formState: { errors, isValid, isDirty, isSubmitting },
-    reset,
     handleSubmit,
-  } = useForm<SignInForm>({
+    reset,
+  } = useForm<SignUpForm>({
     defaultValues: {
       email: "",
       password: "",
+      confirm: "",
     },
-    resolver: zodResolver(SignInFormSchema),
+    resolver: zodResolver(SignUpFormSchema),
   });
 
   const { setIsAuthenicated } = AuthContext.useAuthContext();
 
-  const email = watch("email");
-
-  const onSubmit = async (data: SignInForm) => {
+  const onSubmit = async (data: SignUpForm) => {
     try {
-      await AuthAPI.signin(data.email, data.password);
+      await AuthAPI.signup(data.email, data.password);
       setIsAuthenicated(true);
       navigate(location?.state?.from?.pathname ?? INDEX_ROUTE, {
         replace: true,
       });
       reset();
-      Toaster.success("Sign in successfully");
+      Toaster.success("Sign up successfully");
     } catch (error) {
-      Toaster.error("Sign in failed!");
+      Toaster.error("Sign up failed!");
     }
   };
 
   return (
-    <div className="sign-in-page bg-secondary">
-      <Card className="sign-in-form-card shadow-sm">
+    <div className="sign-up-page bg-primary">
+      <Card className="sign-up-form-card shadow-sm">
         <Card.Body>
           <Card.Title>
-            <h2>Sign in here</h2>
+            <h2>Sign up & join us!</h2>
           </Card.Title>
           <Form
             method="POST"
@@ -78,11 +88,6 @@ const SignIn: React.FC = () => {
             <Form.Group className="mb-3">
               <Form.Label htmlFor="email">Email address</Form.Label>
               <Form.Control placeholder="Enter email" {...register("email")} />
-              {!errors.email && (
-                <Form.Text className="text-muted">
-                  We&apos;ll never share your email with anyone else.
-                </Form.Text>
-              )}
               <Form.Control.Feedback className="d-block" type="invalid">
                 {errors.email?.message}
               </Form.Control.Feedback>
@@ -98,18 +103,28 @@ const SignIn: React.FC = () => {
                 {errors.password?.message}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3 sign-in-form-card__link">
-              <Form.Check type="checkbox" label="Remember me" />
-              &nbsp;|&nbsp;
-              <Link to={SIGNUP_ROUTE}>Register</Link>
+            <Form.Group className="mb-3">
+              <Form.Label>Confirm</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password again"
+                {...register("confirm")}
+              />
+              <Form.Control.Feedback type="invalid" className="d-block">
+                {errors.confirm?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3 sign-up-form-card__link">
+              already have an account? so&nbsp;
+              <Link to={LOGIN_ROUTE}>Sign in</Link>
             </Form.Group>
             <div className="d-grid">
               <Button
-                variant="primary"
+                variant="secondary"
                 type="submit"
                 disabled={!isDirty || isSubmitting}
               >
-                {!email ? "Hmmm, let's see..." : `Yes, i'm ${email}`}
+                Sign up
               </Button>
             </div>
           </Form>
@@ -119,4 +134,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
