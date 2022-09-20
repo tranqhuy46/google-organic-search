@@ -1,0 +1,41 @@
+.keyword-table {
+    &__row {
+        cursor: pointer;
+    }
+
+    &__functional-col {
+        width: 2rem;
+    }
+}
+
+.keyword-action-panel {
+    display: flex;
+    align-items: center;
+    margin-block: 1rem;
+    gap: 1rem;
+}
+
+.keyword-action-panel__input {
+    max-width: 360px;
+}
+
+.keyword-file-upload-button {
+    position: relative;
+    padding-right: 2rem;
+}
+
+.keyword-file-upload-button__inner {
+    display: flex;
+    align-items: center;
+}
+
+.keyword-file-upload-button__label {
+    font-size: 16px;
+}
+
+.keyword-file-upload-button__icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+}
