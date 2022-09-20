@@ -1,8 +1,12 @@
 import express from "express";
-import SearchController from "@gsc/server/controllers/search_controller";
+import AuthRoutes from "@gsc/server/routes/auth_routes";
+import SearchRoutes from "@gsc/server/routes/search_routes";
+import { jwtVerifyMiddleware } from "@gsc/server/routes/auth_middleware";
 
 const router = express.Router();
 
-router.get("/google", SearchController.searchForKeyword);
+router.use("/auth", AuthRoutes);
+
+router.use("/search", jwtVerifyMiddleware, SearchRoutes);
 
 export default router;

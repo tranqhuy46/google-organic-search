@@ -17,14 +17,26 @@
          "@gsc/server/shared/*": [
            "src/shared/*"
          ],
+         "@gsc/server/services/*": [
+            "src/services/*"
+          ],
          "@gsc/server/routes/*": [
             "src/routes/*"
           ],
-          "@gsc/server/controllers*": [
+          "@gsc/server/controllers/*": [
             "src/controllers/*"
           ],
-          "@gsc/server/utils*": [
+          "@gsc/server/utils/*": [
             "src/utils/*"
+          ],
+          "@gsc/server/vendors/*": [
+            "src/vendors/*"
+          ],
+          "@gsc/server/entity/*": [
+            "src/entity/*"
+          ],
+          "@gsc/server/repository/*": [
+            "src/repository/*"
           ],
        },
    },

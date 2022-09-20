@@ -1,15 +1,56 @@
 import React from "react";
-import "./App.scss";
+import { Route, Routes } from "react-router-dom";
+import { QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
+import AxiosConfig from "./lib/axios";
+import HomeLayout from "./layout/home";
+import Home from "./routes/Home/Home";
+import SignIn from "./routes/SignIn";
+import { queryClient } from "./lib/react_query";
+import AuthContext from "./context/auth";
+import { INDEX_ROUTE, LOGIN_ROUTE, SIGNUP_ROUTE } from "./shared/routes";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UnprotectedRoute from "./components/UnprotectedRoute";
+import SignUp from "./routes/SignUp";
 
 function App() {
+  // NOTE: Axios interceptor as a hook
+  AxiosConfig.useRegisterAxiosResponseInterceptor();
+
   return (
-    <div className="container">
-      <div className="row py-4 gy-4">
-        <div className="col-12 card shadow-sm">
-          <div className="card-body">table here</div>
-        </div>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthContext.AuthContextProvider>
+        <Routes>
+          <Route
+            path={LOGIN_ROUTE}
+            element={
+              <UnprotectedRoute>
+                <SignIn />
+              </UnprotectedRoute>
+            }
+          />
+          <Route
+            path={SIGNUP_ROUTE}
+            element={
+              <UnprotectedRoute>
+                <SignUp />
+              </UnprotectedRoute>
+            }
+          />
+          <Route
+            path={INDEX_ROUTE}
+            element={
+              <ProtectedRoute>
+                <HomeLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path={INDEX_ROUTE} element={<Home />} />
+          </Route>
+        </Routes>
+        <ToastContainer />
+      </AuthContext.AuthContextProvider>
+    </QueryClientProvider>
   );
 }
 
