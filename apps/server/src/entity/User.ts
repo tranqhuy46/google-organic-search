@@ -1,13 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { KeywordReport } from "./KeywordReport";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   email: string;
 
   @Column()
   password: string;
+
+  @OneToMany(() => KeywordReport, (report) => report.owner)
+  keywordReports: KeywordReport[];
 }
