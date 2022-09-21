@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import { StatusCodes } from "http-status-codes";
 import type { NextFunction, Request, Response } from "express";
 
 export async function checkIfAnyError(
@@ -8,7 +9,7 @@ export async function checkIfAnyError(
 ) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(422).json({ errors: errors.array() });
+    res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() }).end();
   } else {
     next();
   }

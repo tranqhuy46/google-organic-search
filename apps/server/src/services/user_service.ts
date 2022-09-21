@@ -10,6 +10,7 @@ async function createNewUser(email: string, hashedPassword: string) {
   return await UserRepo.createNewUser({
     email,
     password: hashedPassword,
+    keywordReports: [],
   });
 }
 
