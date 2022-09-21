@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import type { ValidationError } from "express-validator";
 import { LOGIN_ROUTE } from "../shared/routes";
 import envVars from "../shared/env_vars";
 import AuthContext from "../context/auth";
@@ -17,18 +18,30 @@ function useRegisterAxiosResponseInterceptor() {
   const { setIsAuthenicated } = AuthContext.useAuthContext();
 
   useEffect(() => {
-    const _interceptorId = axios.interceptors.response.use(undefined, (err) => {
-      const error = err.response;
-      if (!error) return null;
-      const isRetry = error.config && error.config.__isRetryRequest; // NOTE: may use __isRetryRequest in case of refreshing token
-      if (isRetry) return null;
-      switch (error.status) {
-        case 401:
-          setIsAuthenicated(false);
-          navigate(LOGIN_ROUTE);
-          break;
+    const _interceptorId = instance.interceptors.response.use(
+      undefined,
+      (err) => {
+        const error = err.response;
+        if (!error) return null;
+        const isRetry = error.config && error.config.__isRetryRequest; // NOTE: may use __isRetryRequest in case of refreshing token
+        if (isRetry) return null;
+        switch (error.status) {
+          case 401:
+            setIsAuthenicated(false);
+            navigate(LOGIN_ROUTE);
+            break;
+          default:
+            if (err instanceof AxiosError) {
+              const data = err?.response?.data as { errors: ValidationError[] };
+              if (data?.errors?.length) {
+                // TODO: transform to readable format
+                console.log("data of errors:", data?.errors);
+              }
+            }
+            break;
+        }
       }
-    });
+    );
 
     interceptorId.current = _interceptorId;
 
