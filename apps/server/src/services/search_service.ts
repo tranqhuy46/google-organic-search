@@ -114,11 +114,21 @@ async function searchGoogleWithKeywordsByPuppeteer(
   }
 }
 
-async function getUserKeywordReports(userId: string) {
-  return await KeywordReportRepo.findUserKeywordReports(userId);
+async function getUserKeywordReports(userId: string, q?: string) {
+  const reports = await KeywordReportRepo.findUserKeywordReports(userId);
+  return q
+    ? reports.filter(
+        (r) => r.keyword.toLowerCase().trim().normalize().includes(q) // NOTE: should imple full-text search
+      )
+    : reports;
+}
+
+async function getReportDetail(reportId: string, userId: string) {
+  return await KeywordReportRepo.findKeywordReportDetail(reportId, userId);
 }
 
 export default {
+  getReportDetail,
   getUserKeywordReports,
   searchGoogleWithKeywordsByPuppeteer,
 } as const;

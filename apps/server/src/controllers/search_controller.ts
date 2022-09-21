@@ -1,5 +1,5 @@
 import HttpStatusCodes from "http-status-codes";
-import { body, check } from "express-validator";
+import { body, check, param } from "express-validator";
 import SearchService from "@gsc/server/services/search_service";
 import Pup from "@gsc/server/vendors/puppeteer";
 import { checkIfAnyError } from "@gsc/server/routes/express_validate_middleware";
@@ -7,7 +7,7 @@ import { UnauthorizedError } from "@gsc/server/shared/error";
 import KeywordReportRepo from "@gsc/server/repository/keyword_report_repo";
 import { KeywordReportStatus } from "ui/shared/type";
 import type { RequestHandler } from "express";
-import type { IReq } from "@gsc/server/shared/type";
+import type { IReq, IReqQuery } from "@gsc/server/shared/type";
 import type { ValidationChain } from "express-validator";
 import { KeywordReport } from "../entity/KeywordReport";
 
@@ -18,7 +18,7 @@ const ANTI_XSS_REGEXP =
   /(\b)(on\S+)(\s*)=|javascript|<(|\/|[^\/>][^>]+|\/[^>][^>]+)>/gi;
 
 /** validate */
-const validate = (method: "searchForKeyword") => {
+const validate = (method: "searchForKeyword" | "getKeywordDetail") => {
   let chain: ValidationChain[] = [];
   switch (method) {
     case "searchForKeyword": {
@@ -48,6 +48,20 @@ const validate = (method: "searchForKeyword") => {
               return input;
             }
           })
+      );
+      break;
+    }
+    case "getKeywordDetail": {
+      chain.push(
+        param("reportId")
+          .exists({
+            checkNull: true,
+          })
+          .withMessage("no-report-id-provided")
+          .isString()
+          .withMessage("wrong-report-id-type")
+          .isUUID()
+          .withMessage("invalid-report-id")
       );
       break;
     }
@@ -118,16 +132,35 @@ const searchForKeyword: RequestHandler = async (
   }
 };
 
-const getKeywordReports: RequestHandler = async (req, res) => {
+const getKeywordReports: RequestHandler = async (
+  req: IReqQuery<{
+    q?: string;
+  }>,
+  res
+) => {
   const user = res.locals.sessionUser;
   if (!user) {
     throw new UnauthorizedError();
   }
-  const reports = await SearchService.getUserKeywordReports(user.id);
+  const { q } = req.query;
+  const reports = await SearchService.getUserKeywordReports(user.id, q);
   res.status(OK).json(reports);
 };
 
+const getKeywordDetail: RequestHandler = async (req, res) => {
+  const user = res.locals.sessionUser;
+  if (!user || !user?.id) {
+    throw new UnauthorizedError();
+  }
+
+  const { reportId } = req.params;
+
+  const report = await SearchService.getReportDetail(reportId, user.id);
+  res.status(OK).json(report);
+};
+
 export default {
+  getKeywordDetail,
   searchForKeyword,
   getKeywordReports,
 } as const;

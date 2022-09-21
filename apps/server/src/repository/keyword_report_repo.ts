@@ -61,8 +61,23 @@ async function upsertKeywordReport(reportPayload: Partial<KeywordReport>) {
   }
 }
 
+async function findKeywordReportDetail(id: string, ownerId: string) {
+  try {
+    const foundReport = await keywordReportRepository.findOneBy({
+      id,
+      owner: {
+        id: ownerId,
+      },
+    });
+    return foundReport;
+  } catch (error) {
+    return null;
+  }
+}
+
 export default {
   findOneByKeyword,
-  findUserKeywordReports,
   upsertKeywordReport,
+  findUserKeywordReports,
+  findKeywordReportDetail,
 } as const;

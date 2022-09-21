@@ -7,6 +7,12 @@ const router = express.Router();
 
 router.get("/report", SearchController.getKeywordReports);
 
+router.get(
+  "/report/:reportId",
+  SearchControllerValidator("getKeywordDetail"),
+  SearchController.getKeywordDetail
+);
+
 router.post(
   "/google",
   SearchControllerValidator("searchForKeyword"),
