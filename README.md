@@ -1,73 +1,41 @@
-# Turborepo starter
-
-This is an official Yarn v1 starter turborepo.
-
+# NIMBLE technical test
+    Google organic scraper manager web app
 ## What's inside?
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
+Monorepo with 2 apps:
+    - client (Reactjs)
+    - server (Nodejs)
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `server`: a [Node.js] app
+- `client`: a [React.js] app
+- `ui`: common types
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
+### Local setup
+#### Prerequisites
+    - Docker
+    - Node.js v16 or above
 
-This turborepo has some additional tools already setup for you:
+#### Install
+    - At the root dir, run `yarn` or `npm install` to install all needed dependencies.
+    - Fill all the env variables into:
+        - apps/client/.env (see env-example)
+        - apps/server/.env (see env-example)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+#### Development
+    - At the root dir, run `yarn dev:server`, open another terminal tab then run `yarn dev:client`
 
-### Build
+#### Install `pgAdmin4`
+    - Navigate to `apps/server`, make script `setup-pg-admin.sh` executable then run it.
+    - Now open up the browser, then navigate to `localhost`.
+    - Login to pgAdmin4 using those credentials provided in script `setup-pg-admin.sh`.
 
-To build all apps and packages, run the following command:
+#### I would do some extra stuffs if I have more time.
+    - For example: push all the heavy task in the BE side to task queue, plus using long-polling on FE side to fetch report status. See [Nodejs-task-queue-bull](https://github.com/OptimalBits/bull#bull-features). Redis needed to be setup first in order to run this. Luckily, I found a free Redis service provider (https://dev.to/ramko9999/host-and-use-redis-for-free-51if).
+# Thank you
 
-```
-cd my-turborepo
-yarn run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
