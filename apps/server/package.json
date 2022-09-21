@@ -4,6 +4,7 @@
   "description": "",
   "type": "commonjs",
   "scripts": {
+    "build": "NODE_ENV=production && tsc",
     "serve": "nodemon",
     "typeorm": "typeorm-ts-node-commonjs",
     "setup:pgadmin": "chmod 755 setup-pg-admin.sh && ./setup-pg-admin.sh"

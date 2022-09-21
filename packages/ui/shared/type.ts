@@ -1,13 +1,20 @@
-type TKeywordReportStatus = "PROCESSING" | "FINISHED" | "FAILED";
+enum KeywordReportStatus {
+  PROCESSING = "PROCESSING",
+  DONE = "DONE",
+  FAILED = "FAILED",
+}
 
 interface IKeywordReport {
   id: string;
   html?: string;
+  links: string[];
   keyword: string;
-  totalResults: number;
-  totalSearchTime: number;
-  totalLinks: number;
-  status: TKeywordReportStatus;
+  totalAdwords?: number;
+  totalResults?: number;
+  totalSeconds?: number;
+  status: KeywordReportStatus;
+  owner: { id: string; email: string };
 }
 
-export type { IKeywordReport, TKeywordReportStatus };
+export { KeywordReportStatus };
+export type { IKeywordReport };

@@ -2,6 +2,9 @@
   "name": "@gsc/client",
   "version": "0.1.0",
   "private": true,
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser"
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
     "@testing-library/jest-dom": "^5.16.5",
