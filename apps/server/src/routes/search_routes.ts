@@ -1,8 +1,16 @@
 import express from "express";
-import SearchController from "@gsc/server/controllers/search_controller";
+import SearchController, {
+  validate as SearchControllerValidator,
+} from "@gsc/server/controllers/search_controller";
 
 const router = express.Router();
 
-router.post("/google", SearchController.searchForKeyword);
+router.get("/report", SearchController.getKeywordReports);
+
+router.post(
+  "/google",
+  SearchControllerValidator("searchForKeyword"),
+  SearchController.searchForKeyword
+);
 
 export default router;
