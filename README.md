@@ -36,6 +36,6 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
     - Login to pgAdmin4 using those credentials provided in script `setup-pg-admin.sh`.
 
 #### I would do some extra stuffs if I have more time.
-    - For example: push all the heavy task in the BE side to task queue, plus using long-polling on FE side to fetch report status. See [Nodejs-task-queue-bull](https://github.com/OptimalBits/bull#bull-features). Redis needed to be setup first in order to run this. Luckily, I found a free Redis service provider (https://dev.to/ramko9999/host-and-use-redis-for-free-51if).
+For example: push all the heavy task in the BE side to task queue, plus using long-polling on FE side to fetch report status. See [Nodejs-task-queue-bull](https://github.com/OptimalBits/bull#bull-features). Redis needed to be setup first in order to run this. Luckily, I found a free Redis service provider (https://dev.to/ramko9999/host-and-use-redis-for-free-51if).
 # Thank you
 
