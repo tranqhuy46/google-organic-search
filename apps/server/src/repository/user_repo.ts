@@ -31,8 +31,8 @@ async function findByEmail(email: string) {
 async function createNewUser(payload: Omit<User, "id">) {
   try {
     const result = await userRepository.insert(payload);
-    const id = result.raw?.[0] as string;
-    return { email: payload.email, id };
+    const raw = result.raw?.[0] as { id: string };
+    return { email: payload.email, id: raw?.id };
   } catch (error) {
     throw new UserCreateFailed();
   }
