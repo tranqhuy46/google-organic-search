@@ -1,16 +1,14 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ValidationError } from "express-validator";
 import { LOGIN_ROUTE } from "../shared/routes";
 import envVars from "../shared/env_vars";
 import AuthContext from "../context/auth";
+import Toaster from "./toast";
 
-const instance = axios.create({
-  baseURL: envVars.API_URL,
-  withCredentials: true,
-  // withCredentials: envVars.NODE_ENV === "production",
-});
+// axios.defaults.withCredentials = envVars.NODE_ENV === "production";
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = envVars.API_URL;
 
 function useRegisterAxiosResponseInterceptor() {
   const interceptorId = useRef<number | null>(null);
@@ -18,28 +16,20 @@ function useRegisterAxiosResponseInterceptor() {
   const { setIsAuthenicated } = AuthContext.useAuthContext();
 
   useEffect(() => {
-    const _interceptorId = instance.interceptors.response.use(
-      undefined,
+    const _interceptorId = axios.interceptors.response.use(
+      (response) => response,
       (err) => {
-        const error = err.response;
-        if (!error) return null;
-        const isRetry = error.config && error.config.__isRetryRequest; // NOTE: may use __isRetryRequest in case of refreshing token
-        if (isRetry) return null;
-        switch (error.status) {
+        const error = err?.response;
+        switch (error?.status) {
           case 401:
+            Toaster.error("Unauthorized");
             setIsAuthenicated(false);
             navigate(LOGIN_ROUTE);
             break;
           default:
-            if (err instanceof AxiosError) {
-              const data = err?.response?.data as { errors: ValidationError[] };
-              if (data?.errors?.length) {
-                // TODO: transform to readable format
-                console.log("data of errors:", data?.errors);
-              }
-            }
             break;
         }
+        return Promise.reject(err);
       }
     );
 
@@ -55,4 +45,4 @@ function useRegisterAxiosResponseInterceptor() {
   return null;
 }
 
-export default { instance, useRegisterAxiosResponseInterceptor } as const;
+export default { useRegisterAxiosResponseInterceptor } as const;
