@@ -69,8 +69,12 @@ const SignUp: React.FC = () => {
       });
       reset();
       Toaster.success("Sign up successfully");
-    } catch (error) {
-      Toaster.error("Sign up failed!");
+    } catch (error: any | Error) {
+      Toaster.error(
+        errorLocales[error?.response?.data?.errors?.[0]?.msg] ??
+          errorLocales[error?.response?.data.error] ??
+          "Sign up failed!"
+      );
     }
   };
 
