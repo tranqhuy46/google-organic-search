@@ -1,4 +1,10 @@
+@import '../../scss/media';
+
+$panel-elements-width: 400px;
+
 .keyword-table {
+    min-width: 700px;
+
     &__row {
         input[type="checkbox"] {
             cursor: pointer;
@@ -49,18 +55,24 @@
             border: 1px solid var(--bs-dark);
             color: var(--bs-dark);
         }
+        
+        &--keyword {
+            max-width: 260px;
+            line-break: normal;
+            white-space: normal;
+        }
     }
 }
 
 .keyword-action-panel {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     margin-block: 1rem;
     gap: 1rem;
-
-
     .keyword-action-panel__input {
-        max-width: 400px;
+        width: 100%;
+        max-width: $panel-elements-width;
     }
 
     .keyword-file-upload {
@@ -75,12 +87,12 @@
             transform: translateY(-50%);
             stroke: var(--bs-primary);
         }
+        &__button {
+            min-width: fit-content;
+        }
     }
 
 }
-
-
-
 
 .keyword-offcanvas {
 
@@ -130,6 +142,17 @@
         overflow-x: hidden;
         &__anchor {
             font-size: 0.75rem;
+        }
+    }
+}
+
+@include media-breakpoint-down(md) { 
+    .keyword-action-panel {
+        justify-content: center;
+        .keyword-file-upload__button {
+            width: $panel-elements-width;
+            min-width: fit-content;
+            order: 3;
         }
     }
 }
