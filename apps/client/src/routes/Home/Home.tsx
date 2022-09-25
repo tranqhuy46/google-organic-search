@@ -1,4 +1,5 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -8,7 +9,6 @@ import Badge from "react-bootstrap/Badge";
 import Stack from "react-bootstrap/Stack";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Alert from "react-bootstrap/Alert";
-
 import {
   Search,
   CloudUpload,
@@ -24,7 +24,6 @@ import {
 import { IKeywordReport } from "ui/shared/type";
 import SearchAPI from "../../api/search";
 import "./Home.scss";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import { QUERY_KEYWORD_REPORTS } from "../../shared/query_cache_key";
 import { numberWithCommas } from "../../utils/number";
 
@@ -254,6 +253,9 @@ const Home: React.FC = () => {
   const [reportQuery, setReportQuery] = React.useState<string>("");
   const [uploadedKeywords, setUploadedKeywords] = React.useState<string[]>([]);
   const [consoleLog, setConsoleLog] = React.useState<string>("");
+  const [refetchInterval, setRefetchInterval] = React.useState<number | false>(
+    false
+  );
 
   // Access the client
   const queryClient = useQueryClient();
@@ -266,15 +268,7 @@ const Home: React.FC = () => {
     [QUERY_KEYWORD_REPORTS, reportQuery],
     ({ queryKey }) => SearchAPI.getReports(queryKey[1]),
     {
-      refetchInterval(data, query) {
-        const isSomeInProgress = data?.some(
-          (report) => report.status === "PROCESSING"
-        );
-        if (isSomeInProgress || query.isFetching()) {
-          return 3000; // NOTE: refetch in 3s
-        }
-        return 5000;
-      },
+      refetchInterval,
     }
   );
 
@@ -289,6 +283,7 @@ const Home: React.FC = () => {
       setUploadedKeywords([]);
     },
     onSettled() {
+      setRefetchInterval(false);
       showProcessingLog(false);
     },
   });
@@ -337,6 +332,7 @@ const Home: React.FC = () => {
             disabled={isUploadingKeywords || !uploadedKeywords.length}
             onClick={async () => {
               showProcessingLog(true);
+              setRefetchInterval(3000);
               await uploadKeywordForGoogleSearch(uploadedKeywords);
               refetchReports();
             }}
