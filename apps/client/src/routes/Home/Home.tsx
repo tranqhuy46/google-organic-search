@@ -88,7 +88,10 @@ const ReportRow: React.FC<ReportRowProps> = (props) => {
         />
       </td>
       <td>
-        <Badge className="keyword-table-chip" bg="secondary" pill>
+        <Badge
+          className="keyword-table-chip keyword-table-chip--keyword"
+          bg="secondary"
+        >
           {item.keyword}
         </Badge>
       </td>
@@ -209,7 +212,7 @@ const KeywordReportTable: React.FC<IKeywordReportTableProps> = (props) => {
 
   return (
     <>
-      <Table hover={data?.length !== 0}>
+      <Table className="keyword-table" hover={data?.length !== 0} responsive>
         <thead>
           <tr>
             <th className="keyword-table__functional-col" />
@@ -321,6 +324,7 @@ const Home: React.FC = () => {
           onClick={() => {
             fileInput.current?.click();
           }}
+          className="keyword-file-upload__button"
         >
           Import .csv&nbsp;
           <FileImport size={20} />
