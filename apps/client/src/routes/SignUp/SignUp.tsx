@@ -79,8 +79,9 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="sign-up-page bg-primary">
-      <Card className="sign-up-form-card shadow-sm">
+    <>
+      <div className="sign-up-background" />
+      <Card className="sign-up-card shadow-sm">
         <Card.Body>
           <Card.Title>
             <h2>Sign up & join us!</h2>
@@ -120,7 +121,7 @@ const SignUp: React.FC = () => {
                 {errors.confirm?.message}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3 sign-up-form-card__link">
+            <Form.Group className="mb-3 sign-up-card__link">
               already have an account? so&nbsp;
               <Link to={LOGIN_ROUTE}>Sign in</Link>
             </Form.Group>
@@ -136,7 +137,7 @@ const SignUp: React.FC = () => {
           </Form>
         </Card.Body>
       </Card>
-    </div>
+    </>
   );
 };
 

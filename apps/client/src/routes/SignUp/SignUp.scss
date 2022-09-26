@@ -1,19 +1,17 @@
-.sign-up-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    
+.sign-up-background {
+    position: absolute;
+    inset: 0;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%230F0033'%3e%3cg%3e%3cpath opacity='.3' d='M0 265h265V0H0z'/%3e%3cpath opacity='.1' d='M265 530h265V265H265z'/%3e%3cpath opacity='.2' d='M529 794h265V529H529z'/%3e%3c/g%3e%3cg transform='translate(542)'%3e%3cpath opacity='.3' d='M0 265h265V0H0z'/%3e%3cpath opacity='.1' d='M265 530h265V265H265z'/%3e%3cpath opacity='.2' d='M529 794h265V529H529z'/%3e%3c/g%3e%3cg transform='translate(1102)'%3e%3cpath opacity='.3' d='M0 265h265V0H0z'/%3e%3cpath opacity='.1' d='M265 530h265V265H265z'/%3e%3cpath opacity='.2' d='M529 794h265V529H529z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e");
     background-size: cover;
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
 }
 
-.sign-up-form-card {
+.sign-up-card {
     width: 30vw;
+}
 
-    &__link {
-        display: flex;
-        align-items: center;
-    }
+.sign-up-card__link {
+    display: flex;
+    align-items: center;
 }
