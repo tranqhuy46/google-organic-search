@@ -1,8 +1,8 @@
-import Axios from "../lib/axios";
+import axios from "axios";
 
 async function signin(email: string, password: string) {
   try {
-    await Axios.instance.post("/auth/signin", {
+    await axios.post("/auth/signin", {
       email,
       password,
     });
@@ -14,12 +14,11 @@ async function signin(email: string, password: string) {
 
 async function signup(email: string, password: string) {
   try {
-    await Axios.instance.post("/auth/signup", {
+    const res = await axios.post("/auth/signup", {
       email,
       password,
     });
   } catch (error) {
-    console.error("signup error:", error);
     throw error;
   }
 }

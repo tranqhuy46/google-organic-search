@@ -1,6 +1,4 @@
-import HttpStatusCodes from "http-status-codes";
 import { KeywordReport } from "@gsc/server/entity/KeywordReport";
-// import { CustomError } from "@gsc/server/shared/error";
 import { AppDataSource } from "../data_source";
 
 /** errors */
@@ -26,7 +24,7 @@ async function findOneByKeyword(keyword: string, ownerId: string) {
     });
     return foundReport;
   } catch (error) {
-    return null;
+    throw error;
   }
 }
 
@@ -48,7 +46,7 @@ async function findUserKeywordReports(ownerId: string) {
     });
     return reports;
   } catch (error) {
-    return null;
+    throw error;
   }
 }
 
@@ -57,7 +55,7 @@ async function upsertKeywordReport(reportPayload: Partial<KeywordReport>) {
     const report = await keywordReportRepository.save(reportPayload);
     return report;
   } catch (error) {
-    return null;
+    throw error;
   }
 }
 
@@ -71,7 +69,7 @@ async function findKeywordReportDetail(id: string, ownerId: string) {
     });
     return foundReport;
   } catch (error) {
-    return null;
+    throw error;
   }
 }
 

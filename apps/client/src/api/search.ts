@@ -1,9 +1,9 @@
-import Axios from "../lib/axios";
+import axios from "axios";
 import { IKeywordReport } from "ui/shared/type";
 
 async function searchGoogle(keywords: string[]) {
   try {
-    await Axios.instance.post("/search/google", {
+    await axios.post("/search/google", {
       keywords,
       // keywords: [...keywords, "<script>alert('xss')</script>"], // test xss sanitization
     });
@@ -15,7 +15,7 @@ async function searchGoogle(keywords: string[]) {
 
 async function getReports(query?: string): Promise<IKeywordReport[]> {
   try {
-    const resp = await Axios.instance.get<IKeywordReport[]>(
+    const resp = await axios.get<IKeywordReport[]>(
       `/search/report${query ? `?q=${query}` : ""}`
     );
     return resp?.data;
@@ -29,9 +29,7 @@ async function getReportDetail(
   reportId: string
 ): Promise<IKeywordReport | null> {
   try {
-    const resp = await Axios.instance.get<IKeywordReport>(
-      "/search/report/" + reportId
-    );
+    const resp = await axios.get<IKeywordReport>("/search/report/" + reportId);
     return resp?.data;
   } catch (error) {
     console.error("getReports error:", error);

@@ -81,7 +81,7 @@ const searchForKeyword: RequestHandler = async (
 ) => {
   try {
     const user = res.locals.sessionUser;
-    if (!user || !user?.id) {
+    if (!user?.id) {
       throw new UnauthorizedError();
     }
 
@@ -139,7 +139,7 @@ const getKeywordReports: RequestHandler = async (
   res
 ) => {
   const user = res.locals.sessionUser;
-  if (!user) {
+  if (!user?.id) {
     throw new UnauthorizedError();
   }
   const { q } = req.query;
