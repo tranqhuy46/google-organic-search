@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { STRONG_PASSWORD_REGEX } from "ui/shared/password";
 import Toaster from "../../lib/toast";
 import AuthAPI from "../../api/auth";
 import AuthContext from "../../context/auth";
-import "./SignUp.scss";
 import { INDEX_ROUTE, LOGIN_ROUTE } from "../../shared/routes";
+import errorLocales from "../../shared/error";
+import "./SignUp.scss";
 
 interface SignUpForm {
   email: string;
@@ -24,13 +26,13 @@ const SignUpFormSchema = z
     password: z
       .string()
       .regex(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+        STRONG_PASSWORD_REGEX,
         "Password must be 6 or more characters long, contains at leat one uppercase letter, one digit and one special character."
       ),
     confirm: z
       .string()
       .regex(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+        STRONG_PASSWORD_REGEX,
         "Password must be 6 or more characters long, contains at leat one uppercase letter, one digit and one special character."
       ),
   })
@@ -67,8 +69,12 @@ const SignUp: React.FC = () => {
       });
       reset();
       Toaster.success("Sign up successfully");
-    } catch (error) {
-      Toaster.error("Sign up failed!");
+    } catch (error: any | Error) {
+      Toaster.error(
+        errorLocales[error?.response?.data?.errors?.[0]?.msg] ??
+          errorLocales[error?.response?.data.error] ??
+          "Sign up failed!"
+      );
     }
   };
 

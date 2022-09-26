@@ -11,6 +11,7 @@ import PasswordUtils from "@gsc/server/utils/password";
 import JwtUtils from "@gsc/server/utils/jwt";
 import env_var from "@gsc/server/shared/env_var";
 import { checkIfAnyError } from "@gsc/server/routes/express_validate_middleware";
+import { STRONG_PASSWORD_REGEX } from "ui/shared/password";
 import type { RequestHandler } from "express";
 import type { IReq } from "@gsc/server/shared/type";
 import type { ValidationChain } from "express-validator";
@@ -29,7 +30,7 @@ const validate = (method: "signup" | "signin") => {
         body("password")
           .exists()
           .withMessage("no-password-provided")
-          .isStrongPassword()
+          .matches(STRONG_PASSWORD_REGEX)
           .withMessage("weak-password")
       );
       break;
