@@ -63,8 +63,9 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="sign-in-page bg-secondary">
-      <Card className="sign-in-form-card shadow-sm">
+    <>
+      <div className="sign-in-background" />
+      <Card className="sign-in-card shadow-sm">
         <Card.Body>
           <Card.Title>
             <h2>Sign in here</h2>
@@ -98,7 +99,7 @@ const SignIn: React.FC = () => {
                 {errors.password?.message}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3 sign-in-form-card__link">
+            <Form.Group className="mb-3 sign-in-card__link">
               <Form.Check type="checkbox" label="Remember me" />
               &nbsp;|&nbsp;
               <Link to={SIGNUP_ROUTE}>Register</Link>
@@ -115,7 +116,7 @@ const SignIn: React.FC = () => {
           </Form>
         </Card.Body>
       </Card>
-    </div>
+    </>
   );
 };
 
