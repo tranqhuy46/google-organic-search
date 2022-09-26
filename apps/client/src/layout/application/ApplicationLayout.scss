@@ -1,13 +1,13 @@
 @import '../../scss/media';
 
-.home-layout {
+.application-layout {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
 }
 
-.home-layout-aside {
+.application-layout-aside {
     width: 15vw;
     max-width: 320px;
     min-width: 240px;
@@ -37,7 +37,7 @@
     }
 }
 
-.home-layout-main {
+.application-layout-main {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -45,8 +45,8 @@
 }
 
 @include media-breakpoint-down(md) { 
-    .home-layout {
-        .home-layout-aside {
+    .application-layout {
+        .application-layout-aside {
             display: none;
         }
     }

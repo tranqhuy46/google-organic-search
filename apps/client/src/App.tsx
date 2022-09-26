@@ -1,13 +1,19 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import AxiosConfig from "./lib/axios";
-import HomeLayout from "./layout/home";
+import HomeLayout from "./layout/application";
+import AuthLayout from "./layout/auth";
 import Home from "./routes/Home/Home";
 import SignIn from "./routes/SignIn";
 import { queryClient } from "./lib/react_query";
-import { INDEX_ROUTE, LOGIN_ROUTE, SIGNUP_ROUTE } from "./shared/routes";
+import {
+  INDEX_ROUTE,
+  AUTH_ROUTE,
+  LOGIN_ROUTE,
+  SIGNUP_ROUTE,
+} from "./shared/routes";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnprotectedRoute from "./components/UnprotectedRoute";
 import SignUp from "./routes/SignUp";
@@ -20,21 +26,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route
-          path={LOGIN_ROUTE}
+          path={AUTH_ROUTE}
           element={
             <UnprotectedRoute>
-              <SignIn />
+              <AuthLayout />
             </UnprotectedRoute>
           }
-        />
-        <Route
-          path={SIGNUP_ROUTE}
-          element={
-            <UnprotectedRoute>
-              <SignUp />
-            </UnprotectedRoute>
-          }
-        />
+        >
+          <Route path={LOGIN_ROUTE} element={<SignIn />} />
+          <Route path={SIGNUP_ROUTE} element={<SignUp />} />
+        </Route>
         <Route
           path={INDEX_ROUTE}
           element={
