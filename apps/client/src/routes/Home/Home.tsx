@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
@@ -6,8 +7,6 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Placeholder from "react-bootstrap/Placeholder";
 import Badge from "react-bootstrap/Badge";
-import Stack from "react-bootstrap/Stack";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import Alert from "react-bootstrap/Alert";
 import {
   Search,
@@ -18,14 +17,13 @@ import {
   Database,
   Eye,
   Ad,
-  Link,
-  AppWindow,
 } from "tabler-icons-react";
 import { IKeywordReport } from "ui/shared/type";
 import SearchAPI from "../../api/search";
-import "./Home.scss";
 import { QUERY_KEYWORD_REPORTS } from "../../shared/query_cache_key";
 import { numberWithCommas } from "../../utils/number";
+import { REPORT_DETAIL_ROUTE } from "../../shared/routes";
+import "./Home.scss";
 
 interface IKeywordReportTableProps {
   isLoading: boolean;
@@ -129,85 +127,15 @@ const ReportRow: React.FC<ReportRowProps> = (props) => {
   );
 };
 
-interface ReportOffcanvasProps {
-  isOpen: boolean;
-  item?: IKeywordReport | null;
-  onClose(): void;
-}
-
-const ReportOffcanvas: React.FC<ReportOffcanvasProps> = (props) => {
-  const { item, isOpen, onClose } = props;
-  const { data, isLoading } = useQuery(
-    [QUERY_KEYWORD_REPORTS, item?.id],
-    ({ queryKey }) => SearchAPI.getReportDetail(queryKey[1] ?? ""),
-    {
-      enabled: item?.id != null,
-    }
-  );
-
-  return (
-    <Offcanvas show={isOpen} onHide={onClose} className="keyword-offcanvas">
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>
-          <div className="keyword-offcanvas__title">
-            <span className="fs-5">Keyword</span>
-            <Badge bg="secondary">{data?.keyword}</Badge>
-          </div>
-        </Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
-        {isLoading ? (
-          <span className="text-left fs-5">Loading...</span>
-        ) : (
-          <Stack gap={4}>
-            <div className="label">
-              <Link size={24} />
-              Total links:&nbsp;
-              <Badge>{data?.links?.length ?? "-"}</Badge>
-            </div>
-            <div className="label">
-              <Database size={24} />
-              <span>
-                {numberWithCommas(data?.totalResults ?? 0) ?? "-"}
-                &nbsp;results&nbsp;
-              </span>
-              &nbsp;
-              <span>in</span>
-              &nbsp;
-              <span>{data?.totalSeconds ?? "-"}(s)</span>
-            </div>
-
-            <div>
-              <div className="label">
-                <AppWindow size={24} />
-                HTML snapshot
-              </div>
-              <div className="html-view">
-                {data?.html && (
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: data?.html,
-                    }}
-                  />
-                )}
-                <div className="mask" />
-              </div>
-            </div>
-          </Stack>
-        )}
-      </Offcanvas.Body>
-    </Offcanvas>
-  );
-};
-
 const KeywordReportTable: React.FC<IKeywordReportTableProps> = (props) => {
   const { isLoading, data } = props;
-  const [showedReport, setShowedReport] = React.useState<IKeywordReport | null>(
-    null
-  );
+  const navigate = useNavigate();
 
-  const handleClose = () => setShowedReport(null);
-  const handleShow = (_report: IKeywordReport) => setShowedReport(_report);
+  const handleRowClick = (_report: IKeywordReport) => {
+    navigate({
+      pathname: REPORT_DETAIL_ROUTE.replace(":id", _report.id),
+    });
+  };
 
   return (
     <>
@@ -231,20 +159,13 @@ const KeywordReportTable: React.FC<IKeywordReportTableProps> = (props) => {
             </>
           ) : data?.length ? (
             data?.map((row) => (
-              <ReportRow key={row.id} item={row} onViewClick={handleShow} />
+              <ReportRow key={row.id} item={row} onViewClick={handleRowClick} />
             ))
           ) : (
             <EmptyTableRow />
           )}
         </tbody>
       </Table>
-
-      {/* DETAIL VIEW */}
-      <ReportOffcanvas
-        isOpen={Boolean(showedReport?.id)}
-        item={showedReport}
-        onClose={handleClose}
-      />
     </>
   );
 };
