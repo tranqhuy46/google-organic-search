@@ -1,9 +1,9 @@
 import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import AxiosConfig from "./lib/axios";
-import HomeLayout from "./layout/application";
+import ApplicationLayout from "./layout/application";
 import AuthLayout from "./layout/auth";
 import Home from "./routes/Home/Home";
 import SignIn from "./routes/SignIn";
@@ -13,10 +13,12 @@ import {
   AUTH_ROUTE,
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
+  REPORT_DETAIL_ROUTE,
 } from "./shared/routes";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnprotectedRoute from "./components/UnprotectedRoute";
 import SignUp from "./routes/SignUp";
+import ReportDetail from "./routes/ReportDetail";
 
 function App() {
   // NOTE: Axios interceptor as a hook
@@ -40,11 +42,12 @@ function App() {
           path={INDEX_ROUTE}
           element={
             <ProtectedRoute>
-              <HomeLayout />
+              <ApplicationLayout />
             </ProtectedRoute>
           }
         >
           <Route path={INDEX_ROUTE} element={<Home />} />
+          <Route path={REPORT_DETAIL_ROUTE} element={<ReportDetail />} />
         </Route>
       </Routes>
       <ToastContainer />
