@@ -1,0 +1,50 @@
+.report-detail {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+
+    .back-icon {
+        cursor: pointer;
+    }
+
+    .meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .meta-img {
+            padding: 1rem;
+            border-radius: 50%;
+        }
+        .meta-body {
+            display: flex;
+            flex-direction: column;
+            .meta-content {
+                font-weight: bold;
+                font-size: 1.25rem;
+            }
+            .meta-desc {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .html-card {
+        flex: 1;
+        height: 400px;
+        width: 95%;
+        display: block;
+        position: relative;
+        .card-body {
+            height: 100%;
+            width: 100%;
+            display: block;
+            position: relative;
+            overflow: auto;
+        }
+
+        .html-view {
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+}
